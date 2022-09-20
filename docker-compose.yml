@@ -1,0 +1,19 @@
+version: '3'
+services:
+  php:
+    container_name: vyfuk-wiki-php
+    build:
+      context: .
+      dockerfile: ./.docker/Dockerfile-php
+    image: vyfuk-wiki-php
+    volumes:
+      - ./:/var/www/html
+      - .docker/config/httpd-default.conf:/etc/apache2/apache2.conf:ro
+      - ./logs/:/var/log/apache2/
+      - .docker/config/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+    ports:
+      - '127.0.0.1:80:80'
+      # - '80:80'
+      # First line allows access only from this computer, second one from all computers in your network.
+      # (Remember that you have to define vyfuk.local domain to match your host device's IP)
+      # Only one line can be uncommented at a time!

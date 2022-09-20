@@ -1,3 +1,4 @@
+/logs/
 /conf/*.local.conf
 /conf/acl.auth.php
 /conf/local.php

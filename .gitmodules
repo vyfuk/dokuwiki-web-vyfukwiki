@@ -1,3 +1,18 @@
 [submodule "lib/tpl/vyfukwiki"]
 	path = lib/tpl/vyfukwiki
 	url = https://github.com/vyfuk/dokuwiki-template-vyfukwiki.git
+[submodule "lib/plugins/fkshelper"]
+	path = lib/plugins/fkshelper
+	url = https://github.com/fykosak/dokuwiki-plugin-fkshelper.git
+[submodule "lib/plugins/sqlite"]
+	path = lib/plugins/sqlite
+	url = https://github.com/cosmocode/sqlite.git
+[submodule "lib/plugins/fksdbauth"]
+	path = lib/plugins/fksdbauth
+	url = https://github.com/fykosak/dokuwiki-plugin-fksdbauth.git
+[submodule "lib/plugins/fksdownloader"]
+	path = lib/plugins/fksdownloader
+	url = https://github.com/fykosak/dokuwiki-plugin-fksdownloader.git
+[submodule "lib/plugins/fksdbexport"]
+	path = lib/plugins/fksdbexport
+	url = https://github.com/fykosak/dokuwiki-plugin-fksdbexport.git

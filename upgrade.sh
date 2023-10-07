@@ -30,4 +30,3 @@ for file in $FILES; do
     git checkout "$TAG" -- $file
 done
 git submodule update --init --recursive
-rm -rf _test

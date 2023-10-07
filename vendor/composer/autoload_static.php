@@ -8,23 +8,42 @@ class ComposerStaticInita19a915ee98347a0c787119619d2ff9b
 {
     public static $files = array (
         'fdc0e9724ddc47859c8bf0c1ea0a623a' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/constants.php',
-        '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
         'decc78cc4436b1292c6c0d151b19445c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
     );
 
     public static $prefixLengthsPsr4 = array (
         's' => 
         array (
+            'splitbrain\\slika\\tests\\' => 23,
+            'splitbrain\\slika\\' => 17,
             'splitbrain\\phpcli\\' => 18,
             'splitbrain\\PHPArchive\\' => 22,
+            'splitbrain\\JSStrip\\tests\\' => 25,
+            'splitbrain\\JSStrip\\' => 19,
         ),
         'p' => 
         array (
             'phpseclib\\' => 10,
         ),
+        'S' => 
+        array (
+            'SimplePie\\' => 10,
+        ),
+        'I' => 
+        array (
+            'IXR\\' => 4,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'splitbrain\\slika\\tests\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/splitbrain/slika/tests',
+        ),
+        'splitbrain\\slika\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/splitbrain/slika/src',
+        ),
         'splitbrain\\phpcli\\' => 
         array (
             0 => __DIR__ . '/..' . '/splitbrain/php-cli/src',
@@ -33,9 +52,25 @@ class ComposerStaticInita19a915ee98347a0c787119619d2ff9b
         array (
             0 => __DIR__ . '/..' . '/splitbrain/php-archive/src',
         ),
+        'splitbrain\\JSStrip\\tests\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/splitbrain/php-jsstrip/tests',
+        ),
+        'splitbrain\\JSStrip\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/splitbrain/php-jsstrip/src',
+        ),
         'phpseclib\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
+        ),
+        'SimplePie\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/simplepie/simplepie/src',
+        ),
+        'IXR\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kissifrot/php-ixr/src',
         ),
     );
 
@@ -59,6 +94,7 @@ class ComposerStaticInita19a915ee98347a0c787119619d2ff9b
     public static $classMap = array (
         'AtomCreator03' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/AtomCreator03.php',
         'AtomCreator10' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/AtomCreator10.php',
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'FeedCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/FeedCreator.php',
         'FeedDate' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Element/FeedDate.php',
         'FeedHtmlField' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Element/FeedHtmlField.php',

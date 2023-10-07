@@ -120,10 +120,10 @@ class Indexer {
         }
 
         // arrive here with $words = array(wordlen => array(word => frequency))
-        $word_idx_modified = false;
         $index = array();   //resulting index
         foreach (array_keys($words) as $wlen) {
             $word_idx = $this->getIndex('w', $wlen);
+            $word_idx_modified = false;
             foreach ($words[$wlen] as $word => $freq) {
                 $word = (string)$word;
                 $wid = array_search($word, $word_idx, true);
@@ -179,7 +179,7 @@ class Indexer {
         }
 
         // Special handling for titles so the index file is simpler
-        if (array_key_exists('title', $key)) {
+        if (isset($key['title'])) {
             $value = $key['title'];
             if (is_array($value)) {
                 $value = $value[0];
@@ -927,7 +927,7 @@ class Indexer {
         $status = true;
         $run = 0;
         $lock = $conf['lockdir'].'/_indexer.lock';
-        while (!@mkdir($lock, $conf['dmode'])) {
+        while (!@mkdir($lock)) {
             usleep(50);
             if(is_dir($lock) && time()-@filemtime($lock) > 60*5){
                 // looks like a stale lock - remove it
@@ -942,7 +942,7 @@ class Indexer {
                 return false;
             }
         }
-        if (!empty($conf['dperm'])) {
+        if ($conf['dperm']) {
             chmod($lock, $conf['dperm']);
         }
         return $status;
@@ -1186,8 +1186,10 @@ class Indexer {
             if ($tuple === '') continue;
             list($key, $cnt) = explode('*', $tuple);
             if (!$cnt) continue;
-            $key = $keys[$key];
-            if ($key === false || is_null($key)) continue;
+            if (isset($keys[$key])) {
+                $key = $keys[$key];
+                if ($key === false || is_null($key)) continue;
+            }
             $result[$key] = $cnt;
         }
         return $result;

@@ -160,6 +160,7 @@ $meta['auth_security_timeout'] = array('numeric');
 $meta['securecookie'] = array('onoff');
 $meta['remote']       = array('onoff','_caution' => 'security');
 $meta['remoteuser']   = array('string');
+$meta['remotecors']   = array('string', '_caution' => 'security');
 
 $meta['_anti_spam']  = array('fieldset');
 $meta['usewordblock']= array('onoff');
@@ -170,8 +171,6 @@ $meta['iexssprotect']= array('onoff','_caution' => 'security');
 
 $meta['_editing']    = array('fieldset');
 $meta['usedraft']    = array('onoff');
-$meta['htmlok']      = array('onoff','_caution' => 'security');
-$meta['phpok']       = array('onoff','_caution' => 'security');
 $meta['locktime']    = array('numeric');
 $meta['cachetime']   = array('numeric');
 
@@ -199,6 +198,14 @@ $meta['mailfrom']       = array('email', '_placeholders' => true);
 $meta['mailreturnpath']       = array('email', '_placeholders' => true);
 $meta['mailprefix']     = array('string');
 $meta['htmlmail']       = array('onoff');
+$meta['dontlog'] = array(
+    'disableactions',
+    '_choices' => array(
+        'error',
+        'debug',
+        'deprecated',
+    ),
+);
 
 $meta['_syndication'] = array('fieldset');
 $meta['sitemap']     = array('numeric');
@@ -233,6 +240,7 @@ $meta['trustedproxy'] = array('regex');
 
 $meta['_feature_flags'] = ['fieldset'];
 $meta['defer_js']       = ['onoff'];
+$meta['hidewarnings']   = ['onoff'];
 
 $meta['_network']    = array('fieldset');
 $meta['dnslookups']  = array('onoff');

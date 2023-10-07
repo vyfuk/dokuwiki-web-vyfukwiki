@@ -5,50 +5,67 @@ namespace dokuwiki\Debug;
 
 use Doku_Event;
 use dokuwiki\Extension\EventHandler;
+use dokuwiki\Logger;
 
 class DebugHelper
 {
     const INFO_DEPRECATION_LOG_EVENT = 'INFO_DEPRECATION_LOG';
 
     /**
-     * Log accesses to deprecated fucntions to the debug log
+     * Check if deprecation messages shall be handled
      *
-     * @param string $alternative  (optional) The function or method that should be used instead
-     * @param int    $callerOffset (optional) How far the deprecated method is removed from this one
+     * This is either because its logging is not disabled or a deprecation handler was registered
      *
-     * @triggers \dokuwiki\Debug::INFO_DEPRECATION_LOG_EVENT
+     * @return bool
      */
-    public static function dbgDeprecatedFunction($alternative = '', $callerOffset = 1)
+    public static function isEnabled()
     {
-        global $conf;
         /** @var EventHandler $EVENT_HANDLER */
         global $EVENT_HANDLER;
         if (
-            !$conf['allowdebug'] &&
+            !Logger::getInstance(Logger::LOG_DEPRECATED)->isLogging() &&
             ($EVENT_HANDLER === null || !$EVENT_HANDLER->hasHandlerForEvent('INFO_DEPRECATION_LOG'))
-        ){
+        ) {
             // avoid any work if no one cares
-            return;
+            return false;
         }
+        return true;
+    }
+
+    /**
+     * Log accesses to deprecated fucntions to the debug log
+     *
+     * @param string $alternative (optional) The function or method that should be used instead
+     * @param int $callerOffset (optional) How far the deprecated method is removed from this one
+     * @param string $thing (optional) The deprecated thing, defaults to the calling method
+     * @triggers \dokuwiki\Debug::INFO_DEPRECATION_LOG_EVENT
+     */
+    public static function dbgDeprecatedFunction($alternative = '', $callerOffset = 1, $thing = '')
+    {
+        if (!self::isEnabled()) return;
 
         $backtrace = debug_backtrace();
         for ($i = 0; $i < $callerOffset; $i += 1) {
-            array_shift($backtrace);
+            if(count($backtrace) > 1) array_shift($backtrace);
         }
 
         list($self, $call) = $backtrace;
 
+        if (!$thing) {
+            $thing = trim(
+                (!empty($self['class']) ? ($self['class'] . '::') : '') .
+                $self['function'] . '()', ':');
+        }
+
         self::triggerDeprecationEvent(
             $backtrace,
             $alternative,
-            trim(
-                (!empty($self['class']) ? ($self['class'] . '::') : '') .
-                $self['function'] . '()', ':'),
+            $thing,
             trim(
                 (!empty($call['class']) ? ($call['class'] . '::') : '') .
                 $call['function'] . '()', ':'),
-            $call['file'],
-            $call['line']
+            $self['file'] ?? $call['file'] ?? '',
+            $self['line'] ?? $call['line'] ?? 0
         );
     }
 
@@ -58,19 +75,14 @@ class DebugHelper
      * This is usually called withing a magic getter or setter.
      * For logging deprecated functions or methods see dbgDeprecatedFunction()
      *
-     * @param string $class        The class with the deprecated property
+     * @param string $class The class with the deprecated property
      * @param string $propertyName The name of the deprecated property
      *
      * @triggers \dokuwiki\Debug::INFO_DEPRECATION_LOG_EVENT
      */
     public static function dbgDeprecatedProperty($class, $propertyName)
     {
-        global $conf;
-        global $EVENT_HANDLER;
-        if (!$conf['allowdebug'] && !$EVENT_HANDLER->hasHandlerForEvent(self::INFO_DEPRECATION_LOG_EVENT)) {
-            // avoid any work if no one cares
-            return;
-        }
+        if (!self::isEnabled()) return;
 
         $backtrace = debug_backtrace();
         array_shift($backtrace);
@@ -97,8 +109,8 @@ class DebugHelper
      * @param string $deprecatedThing
      * @param string $caller
      * @param string $file
-     * @param int    $line
-     * @param int    $callerOffset How many lines should be removed from the beginning of the backtrace
+     * @param int $line
+     * @param int $callerOffset How many lines should be removed from the beginning of the backtrace
      */
     public static function dbgCustomDeprecationEvent(
         $alternative,
@@ -107,14 +119,9 @@ class DebugHelper
         $file,
         $line,
         $callerOffset = 1
-    ) {
-        global $conf;
-        /** @var EventHandler $EVENT_HANDLER */
-        global $EVENT_HANDLER;
-        if (!$conf['allowdebug'] && !$EVENT_HANDLER->hasHandlerForEvent(self::INFO_DEPRECATION_LOG_EVENT)) {
-            // avoid any work if no one cares
-            return;
-        }
+    )
+    {
+        if (!self::isEnabled()) return;
 
         $backtrace = array_slice(debug_backtrace(), $callerOffset);
 
@@ -130,12 +137,12 @@ class DebugHelper
     }
 
     /**
-     * @param array  $backtrace
+     * @param array $backtrace
      * @param string $alternative
      * @param string $deprecatedThing
      * @param string $caller
      * @param string $file
-     * @param int    $line
+     * @param int $line
      */
     private static function triggerDeprecationEvent(
         array $backtrace,
@@ -144,7 +151,8 @@ class DebugHelper
         $caller,
         $file,
         $line
-    ) {
+    )
+    {
         $data = [
             'trace' => $backtrace,
             'alternative' => $alternative,
@@ -160,7 +168,7 @@ class DebugHelper
             if ($event->data['alternative']) {
                 $msg .= ' ' . $event->data['alternative'] . ' should be used instead!';
             }
-            dbglog($msg);
+            Logger::getInstance(Logger::LOG_DEPRECATED)->log($msg);
         }
         $event->advise_after();
     }

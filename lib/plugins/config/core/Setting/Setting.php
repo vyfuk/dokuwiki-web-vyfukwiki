@@ -137,9 +137,9 @@ class Setting {
         if($url && !strstr($out, '»')) {//provide no urls for plugins, etc.
             if($out == 'start') {
                 // exception, because this config name is clashing with our actual start page
-                return '<a href="http://www.dokuwiki.org/config:startpage">' . $out . '</a>';
+                return '<a href="https://www.dokuwiki.org/config:startpage">' . $out . '</a>';
             } else {
-                return '<a href="http://www.dokuwiki.org/config:' . $out . '">' . $out . '</a>';
+                return '<a href="https://www.dokuwiki.org/config:' . $out . '">' . $out . '</a>';
             }
         }
         return $out;
@@ -221,6 +221,17 @@ class Setting {
     }
 
     /**
+     * Escaping
+     *
+     * @param string $string
+     * @return string
+     */
+    protected function escape($string) {
+        $tr = array("\\" => '\\\\', "'" => '\\\'');
+        return "'" . strtr(cleanText($string), $tr) . "'";
+    }
+
+    /**
      * Generate string to save local setting value to file according to $fmt
      *
      * @see shouldBeSaved() to check if this should be called
@@ -229,10 +240,15 @@ class Setting {
      * @return string
      */
     public function out($var, $fmt = 'php') {
-        if($fmt != 'php') return '';
+        if ($fmt != 'php') return '';
 
-        $tr = array("\\" => '\\\\', "'" => '\\\''); // escape the value
-        $out = '$' . $var . "['" . $this->getArrayKey() . "'] = '" . strtr(cleanText($this->local), $tr) . "';\n";
+        if (is_array($this->local)) {
+            $value = 'array(' . join(', ', array_map([$this, 'escape'], $this->local)) . ')';
+        } else {
+            $value = $this->escape($this->local);
+        }
+
+        $out = '$' . $var . "['" . $this->getArrayKey() . "'] = $value;\n";
 
         return $out;
     }

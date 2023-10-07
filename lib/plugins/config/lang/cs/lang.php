@@ -3,7 +3,7 @@
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  *
- * @author Petr Kajzar <petr.kajzar@lf1.cuni.cz>
+ * @author Petr Kajzar <petr.kajzar@centrum.cz>
  * @author Aleksandr Selivanov <alexgearbox@yandex.ru>
  * @author Robert Surý <rsurycz@seznam.cz>
  * @author Martin Hořínek <hev@hev.cz>
@@ -117,8 +117,6 @@ $lang['indexdelay']            = 'Časová prodleva před indexací (v sekundác
 $lang['mailguard']             = 'Metoda "zamaskování" emailových adres';
 $lang['iexssprotect']          = 'Zkontrolovat nahrané soubory vůči možnému škodlivému JavaScriptu či HTML';
 $lang['usedraft']              = 'Během editace ukládat koncept automaticky';
-$lang['htmlok']                = 'Povolit vložené HTML';
-$lang['phpok']                 = 'Povolit vložené PHP';
 $lang['locktime']              = 'Maximální životnost zámkových souborů (v sekundách)';
 $lang['cachetime']             = 'Maximální životnost cache (v sekundách)';
 $lang['target____wiki']        = 'Cílové okno pro interní odkazy';
@@ -140,6 +138,7 @@ $lang['mailfrom']              = 'E-mailová adresa, která se bude používat p
 $lang['mailreturnpath']        = 'E-mailová adresa příjemce pro oznámení o nedoručení';
 $lang['mailprefix']            = 'Předpona předmětu e-mailu, která se bude používat pro automatické maily';
 $lang['htmlmail']              = 'Posílat emaily v HTML (hezčí ale větší). Při vypnutí budou posílány jen textové emaily.';
+$lang['dontlog']               = 'Zakázat protokolování pro tyto typy záznamů.';
 $lang['sitemap']               = 'Generovat Google sitemap (interval ve dnech)';
 $lang['rss_type']              = 'Typ XML kanálu';
 $lang['rss_linkto']            = 'XML kanál odkazuje na';

@@ -7,6 +7,7 @@
  */
 
 use dokuwiki\HTTP\DokuHTTPClient;
+use dokuwiki\Logger;
 
 if(!defined('DOKU_MESSAGEURL')){
     if(in_array('ssl', stream_get_transports())) {
@@ -35,7 +36,7 @@ function checkUpdateMessages(){
     // check if new messages needs to be fetched
     if($lm < time()-(60*60*24) || $lm < @filemtime(DOKU_INC.DOKU_SCRIPT)){
         @touch($cf);
-        dbglog("checkUpdateMessages(): downloading messages to ".$cf.($is_http?' (without SSL)':' (with SSL)'));
+        Logger::debug("checkUpdateMessages(): downloading messages to ".$cf.($is_http?' (without SSL)':' (with SSL)'));
         $http = new DokuHTTPClient();
         $http->timeout = 12;
         $resp = $http->get(DOKU_MESSAGEURL.$updateVersion);
@@ -44,10 +45,10 @@ function checkUpdateMessages(){
             // or it looks like one of our messages, not WiFi login or other interposed response
             io_saveFile($cf,$resp);
         } else {
-            dbglog("checkUpdateMessages(): unexpected HTTP response received");
+            Logger::debug("checkUpdateMessages(): unexpected HTTP response received", $http->error);
         }
     }else{
-        dbglog("checkUpdateMessages(): messages up to date");
+        Logger::debug("checkUpdateMessages(): messages up to date");
     }
 
     $data = io_readFile($cf);
@@ -75,21 +76,51 @@ function getVersionData(){
         $version['type'] = 'Git';
         $version['date'] = 'unknown';
 
-        $inventory = DOKU_INC.'.git/logs/HEAD';
-        if(is_file($inventory)){
-            $sz   = filesize($inventory);
-            $seek = max(0,$sz-2000); // read from back of the file
-            $fh   = fopen($inventory,'rb');
-            fseek($fh,$seek);
-            $chunk = fread($fh,2000);
-            fclose($fh);
-            $chunk = trim($chunk);
-            $chunk = @array_pop(explode("\n",$chunk));   //last log line
-            $chunk = @array_shift(explode("\t",$chunk)); //strip commit msg
-            $chunk = explode(" ",$chunk);
-            array_pop($chunk); //strip timezone
-            $date = date('Y-m-d',array_pop($chunk));
-            if($date) $version['date'] = $date;
+        // First try to get date and commit hash by calling Git
+        if (function_exists('shell_exec')) {
+            $commitInfo = shell_exec("git log -1 --pretty=format:'%h %cd' --date=short");
+            if ($commitInfo) {
+                list($version['sha'], $date) = explode(' ', $commitInfo);
+                $version['date'] = hsc($date);
+                return $version;
+            }
+        }
+
+        // we cannot use git on the shell -- let's do it manually!
+        if (file_exists(DOKU_INC . '.git/HEAD')) {
+            $headCommit = trim(file_get_contents(DOKU_INC . '.git/HEAD'));
+            if (strpos($headCommit, 'ref: ') === 0) {
+                // it is something like `ref: refs/heads/master`
+                $headCommit = substr($headCommit, 5);
+                $pathToHead = DOKU_INC . '.git/' . $headCommit;
+                if (file_exists($pathToHead)) {
+                    $headCommit = trim(file_get_contents($pathToHead));
+                } else {
+                    $packedRefs = file_get_contents(DOKU_INC . '.git/packed-refs');
+                    if (!preg_match("~([[:xdigit:]]+) $headCommit~", $packedRefs, $matches)) {
+                        # ref not found in pack file
+                        return $version;
+                    }
+                    $headCommit = $matches[1];
+                }
+            }
+            // At this point $headCommit is a SHA
+            $version['sha'] = $headCommit;
+
+            // Get commit date from Git object
+            $subDir = substr($headCommit, 0, 2);
+            $fileName = substr($headCommit, 2);
+            $gitCommitObject = DOKU_INC . ".git/objects/$subDir/$fileName";
+            if (file_exists($gitCommitObject) && function_exists('zlib_decode')) {
+                $commit = zlib_decode(file_get_contents($gitCommitObject));
+                $committerLine = explode("\n", $commit)[3];
+                $committerData = explode(' ', $committerLine);
+                end($committerData);
+                $ts = prev($committerData);
+                if ($ts && $date = date('Y-m-d', $ts)) {
+                    $version['date'] = $date;
+                }
+            }
         }
     }else{
         global $updateVersion;
@@ -106,7 +137,8 @@ function getVersionData(){
  */
 function getVersion(){
     $version = getVersionData();
-    return $version['type'].' '.$version['date'];
+    $sha = !empty($version['sha']) ? ' (' . $version['sha'] . ')' : '';
+    return $version['type'] . ' ' . $version['date'] . $sha;
 }
 
 /**
@@ -123,13 +155,13 @@ function check(){
     if ($INFO['isadmin'] || $INFO['ismanager']){
         msg('DokuWiki version: '.getVersion(),1);
 
-        if(version_compare(phpversion(),'5.6.0','<')){
-            msg('Your PHP version is too old ('.phpversion().' vs. 5.6.0+ needed)',-1);
+        if(version_compare(phpversion(),'7.2.0','<')){
+            msg('Your PHP version is too old ('.phpversion().' vs. 7.2+ needed)',-1);
         }else{
             msg('PHP version '.phpversion(),1);
         }
     } else {
-        if(version_compare(phpversion(),'5.6.0','<')){
+        if(version_compare(phpversion(),'7.2.0','<')){
             msg('Your PHP version is too old',-1);
         }
     }
@@ -228,7 +260,7 @@ function check(){
 
     if($INFO['userinfo']['name']){
         msg('You are currently logged in as '.$INPUT->server->str('REMOTE_USER').' ('.$INFO['userinfo']['name'].')',0);
-        msg('You are part of the groups '.join($INFO['userinfo']['grps'],', '),0);
+        msg('You are part of the groups '.implode(', ', $INFO['userinfo']['grps']),0);
     }else{
         msg('You are currently not logged in',0);
     }
@@ -421,33 +453,25 @@ function dbg($msg,$hidden=false){
 }
 
 /**
- * Print info to a log file
+ * Print info to debug log file
  *
  * @author Andreas Gohr <andi@splitbrain.org>
- *
+ * @deprecated 2020-08-13
  * @param string $msg
  * @param string $header
  */
 function dbglog($msg,$header=''){
-    global $conf;
-    /* @var Input $INPUT */
-    global $INPUT;
+    dbg_deprecated('\\dokuwiki\\Logger');
 
-    // The debug log isn't automatically cleaned thus only write it when
-    // debugging has been enabled by the user.
-    if($conf['allowdebug'] !== 1) return;
-    if(is_object($msg) || is_array($msg)){
-        $msg = print_r($msg,true);
+    // was the msg as single line string? use it as header
+    if($header === '' && is_string($msg) && strpos($msg, "\n") === false) {
+        $header = $msg;
+        $msg = '';
     }
 
-    if($header) $msg = "$header\n$msg";
-
-    $file = $conf['cachedir'].'/debug.log';
-    $fh = fopen($file,'a');
-    if($fh){
-        fwrite($fh,date('H:i:s ').$INPUT->server->str('REMOTE_ADDR').': '.$msg."\n");
-        fclose($fh);
-    }
+    Logger::getInstance(Logger::LOG_DEBUG)->log(
+        $header, $msg
+    );
 }
 
 /**

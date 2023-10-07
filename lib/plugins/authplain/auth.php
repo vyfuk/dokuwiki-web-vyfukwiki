@@ -1,5 +1,8 @@
 <?php
 
+use dokuwiki\Logger;
+use dokuwiki\Utf8\Sort;
+
 /**
  * Plaintext authentication backend
  *
@@ -48,8 +51,6 @@ class auth_plugin_authplain extends DokuWiki_Auth_Plugin
             $this->cando['getUserCount'] = true;
             $this->cando['getGroups']    = true;
         }
-
-        $this->pregsplit_safe = version_compare(PCRE_VERSION, '6.7', '>=');
     }
 
     /**
@@ -214,6 +215,7 @@ class auth_plugin_authplain extends DokuWiki_Auth_Plugin
             return false;
         }
 
+        if(isset($this->users[$user])) unset($this->users[$user]);
         $this->users[$newuser] = $userinfo;
         return true;
     }
@@ -298,7 +300,7 @@ class auth_plugin_authplain extends DokuWiki_Auth_Plugin
 
         if ($this->users === null) $this->loadUserData();
 
-        ksort($this->users);
+        Sort::ksort($this->users);
 
         $i     = 0;
         $count = 0;
@@ -335,6 +337,7 @@ class auth_plugin_authplain extends DokuWiki_Auth_Plugin
         foreach($this->users as $user => $info) {
             $groups = array_merge($groups, array_diff($info['grps'], $groups));
         }
+        Sort::ksort($groups);
 
         if($limit > 0) {
             return array_splice($groups, $start, $limit);
@@ -351,7 +354,8 @@ class auth_plugin_authplain extends DokuWiki_Auth_Plugin
     public function cleanUser($user)
     {
         global $conf;
-        return cleanID(str_replace(':', $conf['sepchar'], $user));
+
+        return cleanID(str_replace([':', '/', ';'], $conf['sepchar'], $user));
     }
 
     /**
@@ -363,7 +367,8 @@ class auth_plugin_authplain extends DokuWiki_Auth_Plugin
     public function cleanGroup($group)
     {
         global $conf;
-        return cleanID(str_replace(':', $conf['sepchar'], $group));
+
+        return cleanID(str_replace([':', '/', ';'], $conf['sepchar'], $group));
     }
 
     /**
@@ -430,30 +435,12 @@ class auth_plugin_authplain extends DokuWiki_Auth_Plugin
      */
     protected function splitUserData($line)
     {
-        // due to a bug in PCRE 6.6, preg_split will fail with the regex we use here
-        // refer github issues 877 & 885
-        if ($this->pregsplit_safe) {
-            return preg_split('/(?<![^\\\\]\\\\)\:/', $line, 5);       // allow for : escaped as \:
+        $data = preg_split('/(?<![^\\\\]\\\\)\:/', $line, 5);       // allow for : escaped as \:
+        if(count($data) < 5) {
+            $data = array_pad($data, 5, '');
+            Logger::error('User line with less than 5 fields. Possibly corruption in your user file', $data);
         }
-
-        $row = array();
-        $piece = '';
-        $len = strlen($line);
-        for ($i=0; $i<$len; $i++) {
-            if ($line[$i]=='\\') {
-                $piece .= $line[$i];
-                $i++;
-                if ($i>=$len) break;
-            } elseif ($line[$i]==':') {
-                $row[] = $piece;
-                $piece = '';
-                continue;
-            }
-            $piece .= $line[$i];
-        }
-        $row[] = $piece;
-
-        return $row;
+        return $data;
     }
 
     /**

@@ -3,7 +3,9 @@
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  *
- * @author Paulo Schopf <pschopf@gmail.com>
+ * @author Jose Luis Sanches <jose.reis.sanches@gmail.com>
+ * @author Gustavo B. Schenkel <gustavo.schenkel@gmail.com>
+ * @author Paulo <pschopf@gmail.com>
  * @author Mario AlexandTeixeira dos Santos <masterofclan@gmail.com>
  * @author Maykon Oliveira <maykonoliveira850@gmail.com>
  * @author José Vieira <jmsv63@gmail.com>

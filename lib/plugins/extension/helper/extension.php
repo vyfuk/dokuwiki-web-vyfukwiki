@@ -112,7 +112,7 @@ class helper_plugin_extension_extension extends DokuWiki_Plugin
     public function isGitControlled()
     {
         if (!$this->isInstalled()) return false;
-        return is_dir($this->getInstallDir().'/.git');
+        return file_exists($this->getInstallDir().'/.git');
     }
 
     /**
@@ -128,7 +128,7 @@ class helper_plugin_extension_extension extends DokuWiki_Plugin
             array(
                 'authad', 'authldap', 'authpdo', 'authplain',
                 'acl', 'config', 'extension', 'info', 'popularity', 'revert',
-                'safefnrecode', 'styling', 'testing', 'usermanager',
+                'safefnrecode', 'styling', 'testing', 'usermanager', 'logviewer',
                 'template:dokuwiki',
             )
         );
@@ -845,7 +845,7 @@ class helper_plugin_extension_extension extends DokuWiki_Plugin
             $file = @file($managerpath);
             if (!empty($file)) {
                 foreach ($file as $line) {
-                    list($key, $value) = explode('=', trim($line, DOKU_LF), 2);
+                    list($key, $value) = sexplode('=', trim($line, DOKU_LF), 2, '');
                     $key = trim($key);
                     $value = trim($value);
                     // backwards compatible with old plugin manager

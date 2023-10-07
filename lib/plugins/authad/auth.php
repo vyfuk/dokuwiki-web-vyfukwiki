@@ -1,4 +1,6 @@
 <?php
+use dokuwiki\Utf8\Sort;
+use dokuwiki\Logger;
 
 /**
  * Active Directory authentication backend for DokuWiki
@@ -95,21 +97,22 @@ class auth_plugin_authad extends DokuWiki_Auth_Plugin
         }
 
         // Prepare SSO
-        if (!empty($_SERVER['REMOTE_USER'])) {
+        if (!empty($INPUT->server->str('REMOTE_USER'))) {
             // make sure the right encoding is used
             if ($this->getConf('sso_charset')) {
-                $_SERVER['REMOTE_USER'] = iconv($this->getConf('sso_charset'), 'UTF-8', $_SERVER['REMOTE_USER']);
-            } elseif (!\dokuwiki\Utf8\Clean::isUtf8($_SERVER['REMOTE_USER'])) {
-                $_SERVER['REMOTE_USER'] = utf8_encode($_SERVER['REMOTE_USER']);
+                $INPUT->server->set('REMOTE_USER',
+                    iconv($this->getConf('sso_charset'), 'UTF-8', $INPUT->server->str('REMOTE_USER')));
+            } elseif (!\dokuwiki\Utf8\Clean::isUtf8($INPUT->server->str('REMOTE_USER'))) {
+                $INPUT->server->set('REMOTE_USER', utf8_encode($INPUT->server->str('REMOTE_USER')));
             }
 
             // trust the incoming user
             if ($this->conf['sso']) {
-                $_SERVER['REMOTE_USER'] = $this->cleanUser($_SERVER['REMOTE_USER']);
+                $INPUT->server->set('REMOTE_USER', $this->cleanUser($INPUT->server->str('REMOTE_USER')));
 
                 // we need to simulate a login
                 if (empty($_COOKIE[DOKU_COOKIE])) {
-                    $INPUT->set('u', $_SERVER['REMOTE_USER']);
+                    $INPUT->set('u', $INPUT->server->str('REMOTE_USER'));
                     $INPUT->set('p', 'sso_only');
                 }
             }
@@ -129,8 +132,9 @@ class auth_plugin_authad extends DokuWiki_Auth_Plugin
      */
     public function canDo($cap)
     {
+        global $INPUT;
         //capabilities depend on config, which may change depending on domain
-        $domain = $this->getUserDomain($_SERVER['REMOTE_USER']);
+        $domain = $this->getUserDomain($INPUT->server->str('REMOTE_USER'));
         $this->loadServerConfig($domain);
         return parent::canDo($cap);
     }
@@ -149,8 +153,8 @@ class auth_plugin_authad extends DokuWiki_Auth_Plugin
      */
     public function checkPass($user, $pass)
     {
-        if ($_SERVER['REMOTE_USER'] &&
-            $_SERVER['REMOTE_USER'] == $user &&
+        global $INPUT;
+        if ($INPUT->server->str('REMOTE_USER') == $user &&
             $this->conf['sso']
         ) return true;
 
@@ -195,6 +199,7 @@ class auth_plugin_authad extends DokuWiki_Auth_Plugin
         global $conf;
         global $lang;
         global $ID;
+        global $INPUT;
         $adldap = $this->initAdLdap($this->getUserDomain($user));
         if (!$adldap) return array();
 
@@ -260,7 +265,7 @@ class auth_plugin_authad extends DokuWiki_Auth_Plugin
                     $info['expiresin'] = round(($info['expiresat'] - time())/(24*60*60));
 
                     // if this is the current user, warn him (once per request only)
-                    if (($_SERVER['REMOTE_USER'] == $user) &&
+                    if (($INPUT->server->str('REMOTE_USER') == $user) &&
                         ($info['expiresin'] <= $this->conf['expirywarn']) &&
                         !$this->msgshown
                     ) {
@@ -313,10 +318,10 @@ class auth_plugin_authad extends DokuWiki_Auth_Plugin
         $domain = '';
 
         // get NTLM or Kerberos domain part
-        list($dom, $user) = explode('\\', $user, 2);
+        list($dom, $user) = sexplode('\\', $user, 2, '');
         if (!$user) $user = $dom;
         if ($dom) $domain = $dom;
-        list($user, $dom) = explode('@', $user, 2);
+        list($user, $dom) = sexplode('@', $user, 2, '');
         if ($dom) $domain = $dom;
 
         // clean up both
@@ -324,7 +329,8 @@ class auth_plugin_authad extends DokuWiki_Auth_Plugin
         $user   = \dokuwiki\Utf8\PhpString::strtolower(trim($user));
 
         // is this a known, valid domain or do we work without account suffix? if not discard
-        if (!is_array($this->conf[$domain]) && $this->conf['account_suffix'] !== '') {
+        if ((!isset($this->conf[$domain]) || !is_array($this->conf[$domain])) &&
+            $this->conf['account_suffix'] !== '') {
             $domain = '';
         }
 
@@ -383,7 +389,7 @@ class auth_plugin_authad extends DokuWiki_Auth_Plugin
     {
         $adldap = $this->initAdLdap(null);
         if (!$adldap) {
-            dbglog("authad/auth.php getUserCount(): _adldap not set.");
+            Logger::debug("authad/auth.php getUserCount(): _adldap not set.");
             return -1;
         }
         if ($filter == array()) {
@@ -645,7 +651,7 @@ class auth_plugin_authad extends DokuWiki_Auth_Plugin
      */
     public function getUserDomain($user)
     {
-        list(, $domain) = explode('@', $user, 2);
+        list(, $domain) = sexplode('@', $user, 2, '');
         return $domain;
     }
 
@@ -698,7 +704,7 @@ class auth_plugin_authad extends DokuWiki_Auth_Plugin
         $opts['admin_password'] = conf_decodeString($opts['admin_password']); // deobfuscate
 
         // we can change the password if SSL is set
-        if ($opts['use_ssl'] || $opts['use_tls']) {
+        if ($opts['update_pass'] && ($opts['use_ssl'] || $opts['use_tls'])) {
             $this->cando['modPass'] = true;
         } else {
             $this->cando['modPass'] = false;
@@ -739,7 +745,7 @@ class auth_plugin_authad extends DokuWiki_Auth_Plugin
                 $domains[$key] = ltrim($val['account_suffix'], '@');
             }
         }
-        ksort($domains);
+        Sort::ksort($domains);
 
         return $domains;
     }

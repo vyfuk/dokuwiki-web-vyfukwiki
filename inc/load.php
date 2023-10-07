@@ -65,10 +65,6 @@ function load_autoload($name){
         'JpegMeta'              => DOKU_INC.'inc/JpegMeta.php',
         'SimplePie'             => DOKU_INC.'inc/SimplePie.php',
         'FeedParser'            => DOKU_INC.'inc/FeedParser.php',
-        'IXR_Server'            => DOKU_INC.'inc/IXR_Library.php',
-        'IXR_Client'            => DOKU_INC.'inc/IXR_Library.php',
-        'IXR_Error'             => DOKU_INC.'inc/IXR_Library.php',
-        'IXR_IntrospectionServer' => DOKU_INC.'inc/IXR_Library.php',
         'SafeFN'                => DOKU_INC.'inc/SafeFN.class.php',
         'Sitemapper'            => DOKU_INC.'inc/Sitemapper.php',
         'Mailer'                => DOKU_INC.'inc/Mailer.class.php',
@@ -79,11 +75,6 @@ function load_autoload($name){
         'Doku_Renderer_code'     => DOKU_INC.'inc/parser/code.php',
         'Doku_Renderer_xhtmlsummary' => DOKU_INC.'inc/parser/xhtmlsummary.php',
         'Doku_Renderer_metadata' => DOKU_INC.'inc/parser/metadata.php',
-
-        'DokuCLI'                => DOKU_INC.'inc/cli.php',
-        'DokuCLI_Options'        => DOKU_INC.'inc/cli.php',
-        'DokuCLI_Colors'         => DOKU_INC.'inc/cli.php',
-
     );
 
     if(isset($classes[$name])){
@@ -94,10 +85,19 @@ function load_autoload($name){
     // namespace to directory conversion
     $name = str_replace('\\', '/', $name);
 
-    // test namespace
-    if(substr($name, 0, 14) === 'dokuwiki/test/') {
-        $file = DOKU_INC . '_test/' . substr($name, 14) . '.php';
-        if(file_exists($file)) {
+    // test mock namespace
+    if (substr($name, 0, 19) === 'dokuwiki/test/mock/') {
+        $file = DOKU_INC . '_test/mock/' . substr($name, 19) . '.php';
+        if (file_exists($file)) {
+            require $file;
+            return true;
+        }
+    }
+
+    // tests namespace
+    if (substr($name, 0, 14) === 'dokuwiki/test/') {
+        $file = DOKU_INC . '_test/tests/' . substr($name, 14) . '.php';
+        if (file_exists($file)) {
             require $file;
             return true;
         }
@@ -108,7 +108,11 @@ function load_autoload($name){
         $name = str_replace('/test/', '/_test/', $name); // no underscore in test namespace
         $file = DOKU_PLUGIN . substr($name, 16) . '.php';
         if(file_exists($file)) {
-            require $file;
+            try {
+                require $file;
+            } catch (\Throwable $e) {
+                \dokuwiki\ErrorHandler::showExceptionMsg($e, "Error loading plugin $name");
+            }
             return true;
         }
     }
@@ -118,7 +122,11 @@ function load_autoload($name){
         $name = str_replace('/test/', '/_test/', $name); // no underscore in test namespace
         $file = DOKU_INC.'lib/tpl/' . substr($name, 18) . '.php';
         if(file_exists($file)) {
-            require $file;
+            try {
+                require $file;
+            } catch (\Throwable $e) {
+                \dokuwiki\ErrorHandler::showExceptionMsg($e, "Error loading template $name");
+            }
             return true;
         }
     }
@@ -144,7 +152,11 @@ function load_autoload($name){
         $c = ((count($m) === 4) ? "/{$m[3]}" : '');
         $plg = DOKU_PLUGIN . "{$m[2]}/{$m[1]}$c.php";
         if(file_exists($plg)){
-            require $plg;
+            try {
+                require $plg;
+            } catch (\Throwable $e) {
+                \dokuwiki\ErrorHandler::showExceptionMsg($e, "Error loading plugin {$m[2]}");
+            }
         }
         return true;
     }

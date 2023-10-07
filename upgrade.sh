@@ -29,4 +29,5 @@ for file in $FILES; do
     rm -rf $file
     git checkout "$TAG" -- $file
 done
-git submodule update --init
+git submodule update --init --recursive
+rm -rf _test

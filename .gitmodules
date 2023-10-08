@@ -1,6 +1,3 @@
-[submodule "lib/tpl/vyfukwiki"]
-	path = lib/tpl/vyfukwiki
-	url = https://github.com/vyfuk/dokuwiki-template-vyfukwiki.git
 [submodule "lib/plugins/fkshelper"]
 	path = lib/plugins/fkshelper
 	url = https://github.com/fykosak/dokuwiki-plugin-fkshelper.git

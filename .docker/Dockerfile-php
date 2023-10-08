@@ -1,17 +1,19 @@
-FROM php:7.4-apache
+FROM php:8.2-apache
+
+# Add Composer
+COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
 
 # Add better PHP extension installer
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
-RUN chmod +x /usr/local/bin/install-php-extensions
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
 # Install and enable xdebug
 RUN install-php-extensions xdebug && docker-php-ext-enable xdebug
 
 # Following packages are required for some php addons
-RUN apt-get update && apt-get install -y zlib1g-dev libpng-dev libsqlite3-dev
+RUN apt-get update && apt-get install -y git zlib1g-dev libpng-dev libsqlite3-dev
 
 # Install and enable extensions required by some plugins
-RUN REQUIRED_EXTENSIONS="gd mysqli" && install-php-extensions $REQUIRED_EXTENSIONS && \
+RUN REQUIRED_EXTENSIONS="gd mysqli pdo_mysql sodium soap xsl" && install-php-extensions $REQUIRED_EXTENSIONS && \
     docker-php-ext-enable $REQUIRED_EXTENSIONS
 
 # Fix ownership

@@ -21,7 +21,7 @@ TARGET=$(git branch --show-current)
 git checkout "$TAG" --detach
 
 # Get files to be reseted
-FILES=$(ls -a -I '.docker*' -I 'docker*' -I '.git' -I '.gitmodules' -I 'upgrade.sh' -I '.' -I '..' -I '.vscode' -I 'data' -I 'logs' -I 'README.md' -I '/conf/*.local.conf' -I '/conf/acl.auth.php' -I '/conf/local.php' -I '/conf/local.protected.php' -I '/conf/users.auth.php' -I '/conf/user*.css' -I '/conf/user*.js' -I '/conf/words.aspell' -I '/conf/lang/*' -I '/conf/plugin_lang/*' -I '/conf/plugins.local.*' -I '/conf/tpl/*')
+FILES=$(ls -a -I '.docker*' -I 'docker*' -I '.git' -I '.gitmodules' -I 'upgrade.sh' -I '.' -I '..' -I '.vscode' -I 'data' -I '.github' -I 'README.md' -I '/conf/*.local.conf' -I '/conf/acl.auth.php' -I '/conf/local.php' -I '/conf/local.protected.php' -I '/conf/users.auth.php' -I '/conf/user*.css' -I '/conf/user*.js' -I '/conf/words.aspell' -I '/conf/lang/*' -I '/conf/plugin_lang/*' -I '/conf/plugins.local.*' -I '/conf/tpl/*')
 
 # Go back to target branch and start resetting
 git checkout "$TARGET"
@@ -30,3 +30,4 @@ for file in $FILES; do
     git checkout "$TAG" -- $file
 done
 git submodule update --init --recursive
+rm -rf _test

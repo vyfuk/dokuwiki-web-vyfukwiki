@@ -13,3 +13,6 @@
 [submodule "lib/plugins/fksdbexport"]
 	path = lib/plugins/fksdbexport
 	url = https://github.com/fykosak/dokuwiki-plugin-fksdbexport.git
+[submodule "lib/plugins/nspages"]
+	path = lib/plugins/nspages
+	url = https://github.com/gturri/nspages.git

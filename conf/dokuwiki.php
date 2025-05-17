@@ -64,6 +64,7 @@ $conf['rememberme'] = 1;                 //Enable/disable remember me on login
 $conf['disableactions'] = '';            //comma separated list of actions to disable
 $conf['auth_security_timeout'] = 900;    //time (seconds) auth data is considered valid, set to 0 to recheck on every page view
 $conf['securecookie'] = 1;               //never send HTTPS cookies via HTTP
+$conf['samesitecookie'] = 'Lax';         //SameSite attribute for cookies (Lax|Strict|None|Empty)
 $conf['remote']      = 0;                //Enable/disable remote interfaces
 $conf['remoteuser']  = '!!not set!!';    //user/groups that have access to remote interface (comma separated). leave empty to allow all users
 $conf['remotecors']  = '';               //enable Cross-Origin Resource Sharing (CORS) for the remote interfaces. Asterisk (*) to allow all origins. leave empty to deny.
@@ -111,6 +112,7 @@ $conf['mailreturnpath']    = '';         //use this email as returnpath for boun
 $conf['mailprefix']  = '';               //use this as prefix of outgoing mails
 $conf['htmlmail']    = 1;                //send HTML multipart mails
 $conf['dontlog'] = 'debug';              //logging facilities that should be disabled
+$conf['logretain'] = 3;                  //how many days of logs to keep
 
 /* Syndication Settings */
 $conf['sitemap']     = 0;                //Create a Google sitemap? How often? In days.
@@ -159,9 +161,6 @@ $conf['renderer_xhtml'] = 'xhtml';       //renderer to use for main page generat
 $conf['readdircache'] = 0;               //time cache in second for the readdir operation, 0 to deactivate.
 $conf['search_nslimit'] = 0;             //limit the search to the current X namespaces
 $conf['search_fragment'] = 'exact';      //specify the default fragment search behavior
-$conf['trustedproxy'] = '^(::1|[fF][eE]80:|127\.|10\.|192\.168\.|172\.((1[6-9])|(2[0-9])|(3[0-1]))\.)';
-                                         //Regexp of trusted proxy address when reading IP using HTTP header
-                                         //  if blank, do not trust any proxy (including local IP)
 
 /* Feature Flags */
 $conf['defer_js'] = 1;                   // Defer javascript to be executed after the page's HTML has been parsed. Setting will be removed in the next release.
@@ -170,6 +169,15 @@ $conf['hidewarnings'] = 0;               // Hide warnings
 /* Network Settings */
 $conf['dnslookups'] = 1;                 //disable to disallow IP to hostname lookups
 $conf['jquerycdn']  = 0;                 //use a CDN for delivering jQuery?
+$conf['trustedproxies'] = array('::1', 'fe80::/10', '127.0.0.0/8', '10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16');
+                                         // Trusted proxy servers from which to read the X-Forwarded-For header.
+                                         // Each item in the array may be either an IPv4 or IPv6 address, or
+                                         // an IPv4 or IPv6 CIDR range (e.g. 10.0.0.0/8).
+
+$conf['realip'] = false;                 // Enable reading the X-Real-IP header.  Default: false.
+                                         // Only enable this if your server writes this header, otherwise it may be spoofed.
+
+
 // Proxy setup - if your Server needs a proxy to access the web set these
 $conf['proxy']['host']    = '';
 $conf['proxy']['port']    = '';

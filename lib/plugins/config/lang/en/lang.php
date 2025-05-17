@@ -106,6 +106,7 @@ $lang['disableactions_other'] = 'Other actions (comma separated)';
 $lang['disableactions_rss'] = 'XML Syndication (RSS)';
 $lang['auth_security_timeout'] = 'Authentication Security Timeout (seconds)';
 $lang['securecookie'] = 'Should cookies set via HTTPS only be sent via HTTPS by the browser? Disable this option when only the login of your wiki is secured with SSL but browsing the wiki is done unsecured.';
+$lang['samesitecookie'] = 'The samesite cookie attribute to use. Leaving it empty will let the browser decide on the samesite policy.';
 $lang['remote']      = 'Enable the remote API system. This allows other applications to access the wiki via XML-RPC or other mechanisms.';
 $lang['remoteuser']  = 'Restrict remote API access to the comma separated groups or users given here. Leave empty to give access to everyone.';
 $lang['remotecors']  = 'Enable Cross-Origin Resource Sharing (CORS) for the remote interfaces. Asterisk (*) to allow all origins. Leave empty to deny CORS.';
@@ -147,6 +148,7 @@ $lang['mailreturnpath']    = 'Recipient email address for non delivery notificat
 $lang['mailprefix']  = 'Email subject prefix to use for automatic mails. Leave blank to use the wiki title';
 $lang['htmlmail']    = 'Send better looking, but larger in size HTML multipart emails. Disable for plain text only mails.';
 $lang['dontlog'] = 'Disable logging for these types of logs.';
+$lang['logretain'] = 'How many days of logs to keep.';
 
 /* Syndication Settings */
 $lang['sitemap']           = 'Generate Google sitemap this often (in days). 0 to disable';
@@ -186,7 +188,6 @@ $lang['search_fragment_o_exact'] = 'exact';
 $lang['search_fragment_o_starts_with'] = 'starts with';
 $lang['search_fragment_o_ends_with'] = 'ends with';
 $lang['search_fragment_o_contains'] = 'contains';
-$lang['trustedproxy'] = 'Trust forwarding proxies matching this regular expression about the true client IP they report. The default matches local networks. Leave empty to trust no proxy.';
 
 $lang['_feature_flags'] = 'Feature Flags';
 $lang['defer_js'] = 'Defer javascript to be execute after the page\'s HTML has been parsed. Improves perceived page speed but could break a small number of plugins.';
@@ -195,6 +196,8 @@ $lang['hidewarnings'] = 'Do not display any warnings issued by PHP. This may eas
 /* Network Options */
 $lang['dnslookups'] = 'DokuWiki will lookup hostnames for remote IP addresses of users editing pages. If you have a slow or non working DNS server or don\'t want this feature, disable this option';
 $lang['jquerycdn'] = 'Should the jQuery and jQuery UI script files be loaded from a CDN? This adds additional HTTP requests, but files may load faster and users may have them cached already.';
+$lang['trustedproxies'] = 'Comma-separated list of trusted proxy servers from which to read the X-Forwarded-For header. Each item in the array may be either an IPv4 or IPv6 address, or an IPv4 or IPv6 CIDR range (e.g. 10.0.0.0/8). Leave empty to trust no proxy.';
+$lang['realip'] = 'Trust the X-Real-IP header. Only enable this if your server writes this header, otherwise it may be spoofed.';
 
 /* jQuery CDN options */
 $lang['jquerycdn_o_0'] = 'No CDN, local delivery only';

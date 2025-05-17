@@ -3,6 +3,8 @@
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  *
+ * @author Mr_Fang <klxf@vip.qq.com>
+ * @author chuachua <oceanynh@gmail.com>
  * @author Xin <chenxin1034@gmail.com>
  * @author lempel <riverlempel@hotmail.com>
  * @author Cupen <Cupenoruler@foxmail.com>
@@ -81,12 +83,12 @@ $lang['msg_plugin_install_success'] = '插件 %s 安装成功';
 $lang['msg_plugin_update_success'] = '插件 %s 更新成功';
 $lang['msg_upload_failed']     = '上传文件失败';
 $lang['msg_nooverwrite']       = '扩展名 %s 已存在，因此不会被覆盖；要覆盖，请选中覆盖选项。';
-$lang['missing_dependency']    = '<strong>缺少或者被禁用的依赖：</strong> %s';
-$lang['security_issue']        = '<strong>安全问题：</strong> %s';
-$lang['security_warning']      = '<strong>安全警告：</strong> %s';
-$lang['update_available']      = '<strong>更新：</strong>新版本 %s 已经可用。';
-$lang['wrong_folder']          = '<strong>扩展安装错误：</strong>请将扩展目录 "%s" 重命名为 "%s"。';
-$lang['url_change']            = '<strong>URL 已改变：</strong>自上次下载以来的下载 URL 已经改变。请在更新扩展前检查新 URL 是否有效。<br />新的：%s<br />旧的：%s';
+$lang['missing_dependency']    = '缺少或者被禁用的依赖： %s';
+$lang['security_issue']        = '安全问题： %s';
+$lang['security_warning']      = '安全警告： %s';
+$lang['update_message']        = '更新提醒： %s';
+$lang['wrong_folder']          = '扩展安装错误：请将扩展目录 "%s" 重命名为 "%s"。';
+$lang['url_change']            = "URL 已改变：自上次下载以来的下载 URL 已经改变。请在更新扩展前检查新 URL 是否有效。\n新的：%s\n旧的：%s";
 $lang['error_badurl']          = 'URL 应当以 http 或者 https 作为开头';
 $lang['error_dircreate']       = '无法创建用于保存下载的临时文件夹';
 $lang['error_download']        = '无法下载文件：%s';
@@ -100,5 +102,6 @@ $lang['git']                   = '这个扩展是通过 Git 安装的，您可�
 $lang['auth']                  = '这个认证插件没有在配置中启用，请考虑禁用它。';
 $lang['install_url']           = '从 URL 安装：';
 $lang['install_upload']        = '上传扩展：';
+$lang['repo_badresponse']      = '插件库返回无效响应。';
 $lang['repo_error']            = '无法连接到扩展库。请确定您的服务器可以连接 www.dokuwiki.org 并检查您的代理设置。';
 $lang['nossl']                 = '您的 PHP 似乎不支持 SSL，这将导致无法下载多数 DokuWiki 扩展。';

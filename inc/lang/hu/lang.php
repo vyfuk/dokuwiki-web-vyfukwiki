@@ -3,6 +3,7 @@
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  *
+ * @author Fekete Ádám Zsolt <fadam@egbcsoport.hu>
  * @author Hamp Gábor <gabor.hamp@gmail.com>
  * @author Viktor Horváth <horvath.viktor@forrastrend.hu>
  * @author Ziegler Gábor <gziegler@freemail.hu>
@@ -74,7 +75,9 @@ $lang['badpassconfirm']        = 'Hibás jelszó';
 $lang['minoredit']             = 'Apróbb változások';
 $lang['draftdate']             = 'Piszkozat elmentve:';
 $lang['nosecedit']             = 'Időközben megváltozott az oldal, emiatt a szakasz nem friss. Töltsd újra az egész oldalt!';
+$lang['searchcreatepage']      = 'Ha nem találod amit kerestél, létrehozhatod vagy szerkesztheted a %s oldalt, amelyet a keresésed alapján neveztünk el.';
 $lang['search_fullresults']    = 'Teljes szöveg';
+$lang['js']['search_toggle_tools'] = 'Keresőeszközök ki/bekapcsolása';
 $lang['js']['willexpire']      = 'Az oldalszerkesztési zárolásod körülbelül egy percen belül lejár.\nAz ütközések elkerülése végett használd az előnézet gombot a zárolásod frissítéséhez.';
 $lang['js']['notsavedyet']     = 'Elmentetlen változások vannak, amelyek el fognak veszni.
 Tényleg ezt akarod?';
@@ -117,14 +120,19 @@ $lang['js']['media_done_btn']  = 'Kész';
 $lang['js']['media_drop']      = 'Húzd ide a fájlokat a feltöltéshez';
 $lang['js']['media_cancel']    = 'eltávolítás';
 $lang['js']['media_overwrt']   = 'Meglévő fájlok felülírása';
+$lang['js']['data_insecure']   = 'FIGYELEM: Úgy tűnik az adatokat tartalmazó mappa nincs biztonságosan beállítva. Tekintsd át <a href="https://www.dokuwiki.org/security#web_access_security">biztonságos hozzáférési beállítását a DokuWikiben</a>.';
+$lang['search_exact_match']    = 'pontos egyezés';
+$lang['search_starts_with']    = 'Kezdete';
+$lang['search_ends_with']      = 'Vége';
+$lang['search_contains']       = 'Tartalmazza';
+$lang['search_custom_match']   = 'egyéni';
+$lang['search_any_ns']         = 'Bármely névtér';
 $lang['search_any_time']       = 'Bármikor';
 $lang['search_past_7_days']    = 'Elmúlt héten';
 $lang['search_past_month']     = 'Elmúlt hónapban';
 $lang['search_past_year']      = 'Az elmúlt évben';
-$lang['search_sort_by_mtime']  = 'Utolsó módosítás időpontja szerint rendezve';
-$lang['search_exact_match']    = 'pontos egyezés';
-$lang['search_custom_match']   = 'egyéni';
 $lang['search_sort_by_hits']   = 'találatok szerinti rendezés';
+$lang['search_sort_by_mtime']  = 'Utolsó módosítás időpontja szerint rendezve';
 $lang['regmissing']            = 'Sajnáljuk, az összes mezőt ki kell töltened.';
 $lang['reguexists']            = 'Sajnáljuk, ilyen azonosítójú felhasználónk már van.';
 $lang['regsuccess']            = 'A felhasználói azonosítót létrehoztuk. A jelszót postáztuk.';
@@ -145,6 +153,9 @@ $lang['profdeleted']           = 'Felhasználói fiókodat eltávolítottuk err�
 $lang['profconfdelete']        = 'Szeretném eltávolítani a felhasználói fiókomat erről a wikiről. <br/> Ez a cselekvés nem visszavonható.';
 $lang['profconfdeletemissing'] = 'A megerősítő négyzet nincs bepipálva';
 $lang['proffail']              = 'A profil frissítése sikertelen.';
+$lang['proftokenlegend']       = 'Hitelesítő kulcs';
+$lang['proftokengenerate']     = 'Kulcs visszaállítása';
+$lang['proftokeninfo']         = 'A hitelesítő kulcs arra használható, hogy harmadik felek alkalmazásai bejelentkezhessenek, és tevékenykedhessenek a nevedben. A kulcs visszaállítása letiltja a régi kulcsot, és kijelentkeztet minden alkalmazást, ami ezt használta.';
 $lang['pwdforget']             = 'Elfelejtetted a jelszavad? Itt kérhetsz újat';
 $lang['resendna']              = 'Ez a wiki nem támogatja a jelszó újraküldést.';
 $lang['resendpwd']             = 'Új jelszó beállítása a következőhöz:';
@@ -215,6 +226,7 @@ $lang['created']               = 'létrehozva';
 $lang['restored']              = 'régebbi változat helyreállítva (%s)';
 $lang['external_edit']         = 'külső szerkesztés';
 $lang['summary']               = 'A változások összefoglalása';
+$lang['unknowndate']           = 'Ismeretlen dátum';
 $lang['noflash']               = 'Ennek a tartalomnak a megtekintéséhez <a href="http://get.adobe.com/flashplayer">Adobe Flash Plugin</a> szükséges.';
 $lang['download']              = 'Kódrészlet letöltése';
 $lang['tools']                 = 'Eszközök';
@@ -298,8 +310,11 @@ $lang['i_problems']            = 'A Beállító Varázsló a következő problé
 $lang['i_modified']            = 'Biztonsági okokból ez a Varázsló csak új és módosítatlan DokuWiki változaton működik.
 Csomagold ki újra a fájlokat a letöltött csomagból, vagy nézd meg a teljes <a href="https://www.dokuwiki.org/install">Dokuwiki telepítési útmutatót</a>.';
 $lang['i_funcna']              = 'A <code>%s</code> PHP funkció nem elérhető. Esetleg a tárhelyszolgáltató letiltotta biztonsági okok miatt?';
+$lang['i_disabled']            = 'A szolgáltató által letiltva.';
+$lang['i_funcnmail']           = '<b>Megjegyzés:</b> A PHP mail függvény nem érhető el. %s Amennyiben a későbbiekben sem lesz elérhető, érdemes lehet telepíteni az <a href="https://www.dokuwiki.org/plugin:smtp">smtp plugint</a>.	';
 $lang['i_phpver']              = 'A PHP <code>%s</code> verziója alacsonyabb, mint ami szükséges lenne: <code>%s</code>. Frissítsd a PHP-det újabb verzióra!';
 $lang['i_mbfuncoverload']      = 'A DokuWiki futtatásához az mbstring.func_overload opciót ki kell kapcsolni a php.ini-ben.';
+$lang['i_urandom']             = 'A DokuWiki nem tud kriptográfiailag biztonságos számokat létrehozni a sütikhez. Érdemes ellenőrizni az open_basedir beállításokat a php.ini-ben a <code>/dev/urandom</code> megfelelő hozzáféréséhez.	';
 $lang['i_permfail']            = 'A DokiWiki nem tudja írni a <code>%s</code> könyvtárat. Be kell állítanod ehhez a könyvtárhoz a megfelelő jogosultságokat!';
 $lang['i_confexists']          = '<code>%s</code> már létezik.';
 $lang['i_writeerr']            = 'Nem tudom ezt létrehozni: <code>%s</code>. Ellenőrizd a könyvtár/fájl jogosultságokat, és hozd létre az állományt kézzel.';
@@ -350,6 +365,7 @@ $lang['media_perm_upload']     = 'Sajnáljuk, nincs jogod a feltöltéshez.';
 $lang['media_update']          = 'Új verzió feltöltése';
 $lang['media_restore']         = 'Ezen verzió visszaállítása';
 $lang['media_acl_warning']     = 'Ez a lista hiányos lehet a hozzáférési listák (ACL) korlátozásai és a rejtett oldalak miatt.';
+$lang['email_fail']            = 'A PHP mail() hiányzik, vagy le van tiltva. Az alábbi e-mail nem lett elküldve:';
 $lang['currentns']             = 'Aktuális névtér';
 $lang['searchresult']          = 'Keresés eredménye';
 $lang['plainhtml']             = 'Sima HTML';
@@ -358,3 +374,6 @@ $lang['page_nonexist_rev']     = 'A(z) %s oldal nem létezik. Később lett lét
 $lang['unable_to_parse_date']  = 'A "%s" paraméter feldolgozása sikertelen.';
 $lang['email_signature_text']  = 'Ezt a levelet a DokuWiki generálta
 @DOKUWIKIURL@';
+$lang['log_file_too_large']    = 'Log fájl túl nagy. Korábbi sorok kihagyva!';
+$lang['log_file_failed_to_open'] = 'Nem sikerült a log fájl megnyitása.';
+$lang['log_file_failed_to_read'] = 'Hiba történt a log fájl olvasásakor.';

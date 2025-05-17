@@ -3,16 +3,17 @@
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  *
+ * @author Tomáš Heger <heger.tomas@gmail.com>
+ * @author Martin Růžička <martinr@post.cz>
  * @author Petr Kajzar <petr.kajzar@lf1.cuni.cz>
  * @author Viktor Zavadil <vzavadil@newps.cz>
  * @author Jaroslav Lichtblau <jlichtblau@seznam.cz>
  * @author Turkislav <turkislav@blabla.com>
- * @author Martin Růžička <martinr@post.cz>
  */
 $lang['menu']                  = 'Správa rozšíření';
 $lang['tab_plugins']           = 'Instalované moduly';
 $lang['tab_templates']         = 'Instalované šablony';
-$lang['tab_search']            = 'Vyhledej a instaluj';
+$lang['tab_search']            = 'Vyhledat a instalovat';
 $lang['tab_install']           = 'Ruční instalace';
 $lang['notimplemented']        = 'Tato vychytávka není dosud implementována';
 $lang['notinstalled']          = 'Toto rozšíření není instalováno';
@@ -30,15 +31,15 @@ $lang['btn_install']           = 'Instalovat';
 $lang['btn_reinstall']         = 'Přeinstalovat';
 $lang['js']['reallydel']       = 'Opravdu odinstalovat toto rozšíření?';
 $lang['js']['display_viewoptions'] = 'Zobrazit možnosti:';
-$lang['js']['display_enabled'] = 'povolit';
-$lang['js']['display_disabled'] = 'zakázat';
+$lang['js']['display_enabled'] = 'povolené';
+$lang['js']['display_disabled'] = 'zakázané';
 $lang['js']['display_updatable'] = 'aktualizovatelné';
 $lang['search_for']            = 'Hledat rozšíření:';
 $lang['search']                = 'Hledat';
 $lang['extensionby']           = '<strong>%s</strong> od %s';
 $lang['screenshot']            = 'Screenshot %s';
 $lang['popularity']            = 'Popularita: %s%%';
-$lang['homepage_link']         = 'Dokumenty';
+$lang['homepage_link']         = 'Dokumentace';
 $lang['bugs_features']         = 'Chyby';
 $lang['tags']                  = 'Štítky:';
 $lang['author_hint']           = 'Vyhledat rozšíření podle tohoto autora';
@@ -77,12 +78,11 @@ $lang['msg_plugin_install_success'] = 'Zásuvný modul %s úspěšně nainstalov
 $lang['msg_plugin_update_success'] = 'Zásuvný modul %s úspěšně aktualizován.';
 $lang['msg_upload_failed']     = 'Nahrávání souboru selhalo';
 $lang['msg_nooverwrite']       = 'Rozšíření %s již existuje, proto nebylo přepsáno; pro přepsání zatrhněte příslušnou možnost';
-$lang['missing_dependency']    = '<strong>Chybějící nebo zakázaná závislost:</strong> %s';
-$lang['security_issue']        = '<strong>Bezpečnostní problém:</strong> %s';
-$lang['security_warning']      = '<strong>Bezpečnostní varování:</strong> %s';
-$lang['update_available']      = '<strong>Aktualizace:</strong> Je dostupná nová verze %s.';
-$lang['wrong_folder']          = '<strong>Zásuvný modul nesprávně nainstalován:</strong> Přejmenujte adresář modulu "%s" na "%s".';
-$lang['url_change']            = '<strong>URL se změnila:</strong> URL pro stahování se změnila od poslední aktualizace. Před další aktualizací tohoto rozšíření ověřte správnost nové URL.<br />Nová: %s<br />Stará: %s';
+$lang['missing_dependency']    = 'Chybějící nebo zakázaná závislost: %s';
+$lang['security_issue']        = 'Bezpečnostní problém: %s';
+$lang['security_warning']      = 'Bezpečnostní varování: %s';
+$lang['wrong_folder']          = 'Zásuvný modul nesprávně nainstalován: Přejmenujte adresář modulu "%s" na "%s".';
+$lang['url_change']            = "URL se změnila: URL pro stahování se změnila od poslední aktualizace. Před další aktualizací tohoto rozšíření ověřte správnost nové URL.\nNová: %s\nStará: %s";
 $lang['error_badurl']          = 'Adresy URL by měly začínat s http nebo https';
 $lang['error_dircreate']       = 'Nelze vytvořit dočasný adresář pro přijetí stahování';
 $lang['error_download']        = 'Nelze stáhnout soubor: %s';

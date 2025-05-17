@@ -3,6 +3,8 @@
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  *
+ * @author Jürgen Mayer <gro.ikiwukod@x.wellen.org>
+ * @author Xrizzy <xrizzy@web.de>
  * @author Kurt Singer <webmaster@kurt-singer.com>
  * @author Robert Riebisch <rr@bttr-software.de>
  * @author Andreas Gohr <andi@splitbrain.org>
@@ -183,6 +185,9 @@ $lang['profdeleted']           = 'Ihr Benutzerprofil wurde im Wiki gelöscht.';
 $lang['profconfdelete']        = 'Ich möchte mein Benutzerprofil löschen.<br/> Diese Aktion lässt sich nicht rückgängig machen,';
 $lang['profconfdeletemissing'] = 'Bestätigung in Kontrollkästchen fehlt';
 $lang['proffail']              = 'Das Benutzerkonto konnte nicht aktualisiert werden.';
+$lang['proftokenlegend']       = 'Zugangs-Token';
+$lang['proftokengenerate']     = 'Rücksetz-Token';
+$lang['proftokeninfo']         = 'Das Zugangs-Token kann von Dritten benutzt werden, um Aktionen in Deinem Namen durchzuführen. Wird das Token zurückgesetzt, wird das alte ungültig und es wird aus allen Anwendungen, die das alte Token verwendet haben, ausgeloggt.';
 $lang['pwdforget']             = 'Passwort vergessen? Fordern Sie ein neues an';
 $lang['resendna']              = 'Passwörter versenden ist in diesem Wiki nicht möglich.';
 $lang['resendpwd']             = 'Neues Passwort setzen für';
@@ -400,3 +405,6 @@ $lang['page_nonexist_rev']     = 'Die Seite exitiert nicht unter %s. Sie wurde a
 $lang['unable_to_parse_date']  = 'Parameter "%s" kann nicht geparsed werden.';
 $lang['email_signature_text']  = 'Diese E-Mail wurde erzeugt vom DokuWiki unter
 @DOKUWIKIURL@';
+$lang['log_file_too_large']    = 'Protokolldatei (Log file) zu groß. Vorherige Zeilen wurden übersprungen!';
+$lang['log_file_failed_to_open'] = 'Protokolldatei (Log file) konnte nicht geöffnet werden.';
+$lang['log_file_failed_to_read'] = 'Beim Lesen des Protokolls ist ein Fehler aufgetreten.';

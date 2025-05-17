@@ -3,6 +3,7 @@
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  *
+ * @author Jürgen Mayer <gro.ikiwukod@x.wellen.org>
  * @author Andreas Gohr <andi@splitbrain.org>
  * @author Markus Glaser <glaser@hallowelt.com>
  * @author Axel Schwarzer <SchwarzerA@gmail.com>
@@ -108,6 +109,7 @@ $lang['disableactions_other']  = 'Andere Aktionen (durch Komma getrennt)';
 $lang['disableactions_rss']    = 'XML-Syndikation (RSS)';
 $lang['auth_security_timeout'] = 'Authentifikations-Timeout (Sekunden)';
 $lang['securecookie']          = 'Sollen Cookies, die via HTTPS gesetzt wurden nur per HTTPS versendet werden? Deaktivieren Sie diese Option, wenn nur der Login Ihres Wikis mit SSL gesichert ist, aber das Betrachten des Wikis ungesichert geschieht.';
+$lang['samesitecookie']        = 'Das samesite Cookie Attribut. Wenn es leer gelassen wird, entscheidet der Browser über die verwendete Richtlinie.';
 $lang['remote']                = 'Aktiviert den externen API-Zugang. Diese Option erlaubt es externen Anwendungen von außen auf die XML-RPC-Schnittstelle oder anderweitigen Schnittstellen zu zugreifen.';
 $lang['remoteuser']            = 'Zugriff auf die externen Schnittstellen durch kommaseparierte Angabe von Benutzern oder Gruppen einschränken. Ein leeres Feld erlaubt Zugriff für jeden.';
 $lang['remotecors']            = 'Erlaubt externen Clients API-Zugriff per Cross-Origin Resource Sharing (CORS). Asterisk (*), um alle Quellen zu erlauben. Leer lassen, um CORS zu deaktivieren.';
@@ -139,6 +141,7 @@ $lang['mailreturnpath']        = 'Empfänger-E-Mail-Adresse für Unzustellbarkei
 $lang['mailprefix']            = 'Präfix für E-Mail-Betreff beim automatischen Versand von Benachrichtigungen (Leer lassen um den Wiki-Titel zu verwenden)';
 $lang['htmlmail']              = 'Versendet optisch angenehmere, aber größere E-Mails im HTML-Format (multipart). Deaktivieren, um Text-Mails zu versenden.';
 $lang['dontlog']               = 'Protokollierung für diese Logtypen deaktivieren.';
+$lang['logretain']             = 'Wieviele Tage die Logdateien aufgehoben werden.';
 $lang['sitemap']               = 'Google Sitemap erzeugen (Tage). Mit 0 deaktivieren.';
 $lang['rss_type']              = 'XML-Feed-Format';
 $lang['rss_linkto']            = 'XML-Feed verlinken auf';
@@ -173,7 +176,6 @@ $lang['search_fragment_o_exact'] = 'genaue Treffer';
 $lang['search_fragment_o_starts_with'] = 'beginnt mit';
 $lang['search_fragment_o_ends_with'] = 'endet mit';
 $lang['search_fragment_o_contains'] = 'enthält';
-$lang['trustedproxy']          = 'Vertrauen Sie Weiterleitungs-Proxys, welche dem regulärem Ausdruck entsprechen, hinsichtlich der angegebenen Client-ID. Der Standardwert entspricht dem lokalem Netzwerk. Leer lassen um jedem Proxy zu vertrauen.';
 $lang['_feature_flags']        = 'Feature-Flags';
 $lang['defer_js']              = 'JavaScript-Ausführung verzögern bis das HTML der gesamten Seite verarbeitet wurde. Erhöht die gefühlte Geschwindigkeit des Seitenaufbaus, kann aber mit einigen wenigen Plugins inkompatibel sein.';
 $lang['hidewarnings']          = 'Keine PHP Warnungen anzeigen. Diese Einstellung kann den Umstieg auf PHP8+ erleichtern. Warnungen werden weiterhin im Fehlerlog gespeichert und sollten gemeldet werden.';

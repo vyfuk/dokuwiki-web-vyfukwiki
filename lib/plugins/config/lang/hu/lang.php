@@ -3,6 +3,7 @@
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  *
+ * @author Fekete Ádám Zsolt <fadam@egbcsoport.hu>
  * @author Hamp Gábor <gabor.hamp@gmail.com>
  * @author Viktor Horváth <horvath.viktor@forrastrend.hu>
  * @author Sandor TIHANYI <stihanyi+dw@gmail.com>
@@ -39,6 +40,7 @@ $lang['_advanced']             = 'Haladó beállítások';
 $lang['_network']              = 'Hálózati beállítások';
 $lang['_msg_setting_undefined'] = 'Nincs beállított metaadat.';
 $lang['_msg_setting_no_class'] = 'Nincs beállított osztály.';
+$lang['_msg_setting_no_known_class'] = 'A beállító osztály nem érhető el.';
 $lang['_msg_setting_no_default'] = 'Nincs alapértelmezett érték.';
 $lang['title']                 = 'Wiki neve';
 $lang['start']                 = 'Kezdőoldal neve';
@@ -92,6 +94,7 @@ $lang['auth_security_timeout'] = 'Authentikációs biztonsági időablak (másod
 $lang['securecookie']          = 'A böngészők a HTTPS felett beállított sütijüket csak HTTPS felett küldhetik? Kapcsoljuk ki ezt az opciót, ha csak a bejelentkezést védjük SSL-lel, a wiki tartalmának böngészése nyílt forgalommal történik.';
 $lang['remote']                = 'Távoli API engedélyezése. Ezzel más alkalmazások XML-RPC-n keresztül hozzáférhetnek a wikihez.';
 $lang['remoteuser']            = 'A távoli API hozzáférés korlátozása a következő felhasználókra vagy csoportokra. Hagyd üresen, ha mindenki számára elérhető!';
+$lang['remotecors']            = 'A Cross-Origin Resource Sharing (CORS) engedélyezése más domainről való eléréshez. A csillag (*) engedélyezi az elérést minden domain számára. Hagyd üresen a CORS letiltásához. ';
 $lang['usewordblock']          = 'Szólista alapú spam-szűrés';
 $lang['relnofollow']           = 'rel="nofollow" beállítás használata külső hivatkozásokra';
 $lang['indexdelay']            = 'Várakozás indexelés előtt (másodperc)';
@@ -116,8 +119,11 @@ $lang['subscribe_time']        = 'Az értesítések kiküldésének késlelteté
 $lang['notify']                = 'Az oldal-változásokat erre az e-mail címre küldje';
 $lang['registernotify']        = 'Értesítés egy újonnan regisztrált felhasználóról erre az e-mail címre';
 $lang['mailfrom']              = 'Az automatikusan küldött levelekben használt e-mail cím';
+$lang['mailreturnpath']        = 'E-mail cím a kézbesíthetetlen levelekről szóló értesítésekhez';
 $lang['mailprefix']            = 'Előtag az automatikus e-mailek tárgyában';
 $lang['htmlmail']              = 'Szebb, de nagyobb méretű HTML multipart e-mailek küldése. Tiltsd le a nyers szöveges üzenetekhez!';
+$lang['dontlog']               = 'Naplózás letiltása ezekhez a naplótípusokhoz.';
+$lang['logretain']             = 'Hány napig kerüljenek tárolásra a naplófájlok.';
 $lang['sitemap']               = 'Hány naponként generáljunk Google sitemap-ot?';
 $lang['rss_type']              = 'XML hírfolyam típus';
 $lang['rss_linkto']            = 'XML hírfolyam hivatkozás';
@@ -127,6 +133,7 @@ $lang['rss_show_summary']      = 'A hírfolyam címébe összefoglaló helyezés
 $lang['rss_media']             = 'Milyen változások legyenek felsorolva az XML hírfolyamban?';
 $lang['rss_media_o_both']      = 'mindkettő';
 $lang['rss_media_o_pages']     = 'oldalak';
+$lang['rss_media_o_media']     = 'média';
 $lang['updatecheck']           = 'Frissítések és biztonsági figyelmeztetések figyelése. Ehhez a DokuWikinek kapcsolatba kell lépnie a update.dokuwiki.org-gal.';
 $lang['userewrite']            = 'Szép URL-ek használata';
 $lang['useslash']              = 'Per-jel használata névtér-elválasztóként az URL-ekben';
@@ -145,8 +152,17 @@ $lang['renderer_xhtml']        = 'Az elsődleges (xhtml) wiki kimenet generáló
 $lang['renderer__core']        = '%s (dokuwiki mag)';
 $lang['renderer__plugin']      = '%s (bővítmény)';
 $lang['search_fragment_o_exact'] = 'pontosan';
+$lang['search_fragment_o_starts_with'] = 'kezdete';
+$lang['search_fragment_o_ends_with'] = 'vége';
 $lang['search_fragment_o_contains'] = 'tartalmaz';
+$lang['_feature_flags']        = 'Funkció kapcsolók';
+$lang['hidewarnings']          = 'Ne jelenjenek meg a PHP figyelmezetései. Ez megkönnyítheti a PHP8+ verziókra való átállást. A figyelmeztetések továbbra is bekerülnek a hibanaplóba, és továbbra is érdemes jelenteni őket.';
 $lang['dnslookups']            = 'A DokuWiki megpróbál hosztneveket keresni a távoli IP-címekhez. Amennyiben lassú, vagy nem működő DNS-szervered van vagy csak nem szeretnéd ezt a funkciót, tiltsd le ezt az opciót!';
+$lang['jquerycdn']             = 'A jQuery és a jQuery UI szkriptek CDN-en keresztül töltődjenek be? Ez további HTTP lekérdezéseket jelent, de lehetséges, hogy a fájlok gyorsabban töltődnek be azon felhasználóknál, akiknél már gyorsítótárazva vannak.';
+$lang['realip']                = 'Bízzunk meg az X-Real-IP fejlécben. Csak akkor engedélyezd, ha a saját szervered küldi ezt a fejlécet, ellenkező esetben meghamisíthatják azt.';
+$lang['jquerycdn_o_0']         = 'Nincs CDN, csak helyi kiszolgálás';
+$lang['jquerycdn_o_jquery']    = 'CDN itt: code.jquery.com';
+$lang['jquerycdn_o_cdnjs']     = 'CDN itt: cdnjs.com';
 $lang['proxy____host']         = 'Proxy-szerver neve';
 $lang['proxy____port']         = 'Proxy port';
 $lang['proxy____user']         = 'Proxy felhasználó név';
